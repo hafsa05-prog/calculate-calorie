@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calorie Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Fraunces:wght@300;400;600&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="base.css">
+  <script src="script.js"></script>
+ 
+ 
+   
+</head>
+<body>
+
+<div class="page">
+  <header>
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+    </div>
+    <h1>Calorie Calculator</h1>
+    <p>Estimate your daily calorie needs using the Mifflin-St Jeor equation</p>
+  </header>
+
+  <div class="card">
+    <div class="card-title">Your details</div>
+    <div class="form-grid">
+      <div class="fg">
+        <label for="age">Age (years)</label>
+        <input type="number" id="age" placeholder="e.g. 28" min="1" max="120">
+        <span class="err-msg" id="err-age"></span>
+      </div>
+      <div class="fg">
+        <label for="gender">Gender</label>
+        <select id="gender">
+          <option value="">Select gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+        <span class="err-msg" id="err-gender"></span>
+      </div>
+      <div class="fg">
+        <label for="weight">Weight (kg)</label>
+        <input type="number" id="weight" placeholder="e.g. 70" min="1" max="500" step="0.1">
+        <span class="err-msg" id="err-weight"></span>
+      </div>
+      <div class="fg">
+        <label for="height">Height (cm)</label>
+        <input type="number" id="height" placeholder="e.g. 170" min="50" max="300">
+        <span class="err-msg" id="err-height"></span>
+      </div>
+      <div class="fg full">
+        <label for="activity">Activity level</label>
+        <select id="activity">
+          <option value="">Select activity level</option>
+          <option value="1.2">Sedentary — little or no exercise</option>
+          <option value="1.375">Lightly active — light exercise 1–3 days/week</option>
+          <option value="1.55">Moderately active — moderate exercise 3–5 days/week</option>
+          <option value="1.725">Very active — hard exercise 6–7 days/week</option>
+          <option value="1.9">Extra active — very hard exercise &amp; physical job</option>
+        </select>
+        <span class="err-msg" id="err-activity"></span>
+      </div>
+      <div class="fg full">
+        <label for="goal">Your goal</label>
+        <select id="goal">
+          <option value="maintain">Maintain weight</option>
+          <option value="lose">Lose weight</option>
+          <option value="gain">Gain weight</option>
+        </select>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-calc" onclick="calculate()">Calculate my calories</button>
+      <button class="btn-reset" onclick="resetForm()">Reset</button>
+    </div>
+  </div>
+
+  <div class="results" id="results">
+    <div class="card">
+      <div class="card-title">Key metrics</div>
+      <div class="metrics-row">
+        <div class="metric-tile mt-green">
+          <div class="mt-label">BMR</div>
+          <div class="mt-value" id="r-bmr">—</div>
+          <div class="mt-sub">kcal / day</div>
+          <div class="mt-desc">Calories burned at complete rest to maintain basic body functions.</div>
+        </div>
+        <div class="metric-tile mt-blue">
+          <div class="mt-label">Maintenance</div>
+          <div class="mt-value" id="r-maintain">—</div>
+          <div class="mt-sub">kcal / day</div>
+          <div class="mt-desc">Calories needed to keep your current weight at your activity level.</div>
+        </div>
+        <div class="metric-tile mt-amber">
+          <div class="mt-label">BMI</div>
+          <div class="mt-value" id="r-bmi">—</div>
+          <div class="mt-sub" id="r-bmi-cat">—</div>
+          <div class="mt-desc">Body Mass Index — weight-to-height ratio as a general health indicator.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Calorie breakdown</div>
+      <div class="bars">
+        <div class="bar-row">
+          <span class="bar-label">BMR (base)</span>
+          <div class="bar-track"><div class="bar-fill" id="bar-bmr" style="background:var(--green)"></div></div>
+          <span class="bar-kcal" id="bl-bmr">—</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Maintain</span>
+          <div class="bar-track"><div class="bar-fill" id="bar-maintain" style="background:var(--blue)"></div></div>
+          <span class="bar-kcal" id="bl-maintain">—</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Lose weight</span>
+          <div class="bar-track"><div class="bar-fill" id="bar-lose" style="background:var(--amber)"></div></div>
+          <span class="bar-kcal" id="bl-lose">—</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Gain weight</span>
+          <div class="bar-track"><div class="bar-fill" id="bar-gain" style="background:var(--rose)"></div></div>
+          <span class="bar-kcal" id="bl-gain">—</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Goal targets</div>
+      <div class="goal-list">
+        <div class="goal-row">
+          <div>
+            <div class="gtitle">Lose weight</div>
+            <div class="gsub">Moderate deficit (–300 to –500 kcal)</div>
+          </div>
+          <div class="gval" style="color:var(--amber)" id="r-lose">—</div>
+        </div>
+        <div class="goal-row">
+          <div>
+            <div class="gtitle">Maintain weight</div>
+            <div class="gsub">Match energy intake to expenditure</div>
+          </div>
+          <div class="gval" style="color:var(--blue)" id="r-maintain2">—</div>
+        </div>
+        <div class="goal-row">
+          <div>
+            <div class="gtitle">Gain weight</div>
+            <div class="gsub">Moderate surplus (+250 to +500 kcal)</div>
+          </div>
+          <div class="gval" style="color:var(--green)" id="r-gain">—</div>
+        </div>
+      </div>
+      <div class="tip-box" id="goal-tip"></div>
+    </div>
+  </div>
+</div>
+
+
+   
+
+</body>
+</html>
